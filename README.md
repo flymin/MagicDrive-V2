@@ -59,8 +59,8 @@ Step-by-step guide:
     ```
 2. Install Colossalai
     ```bash
-    git clone 
-    git checkout
+    git clone https://github.com/flymin/ColossalAI.git
+    git checkout pt2.4 && git pull
     cd ColossalAI
     BUILD_EXT=1 pip install .
     ```
@@ -92,8 +92,8 @@ Step-by-step guide:
 2. Install Colossalai
     ```bash
     # I remove dependency on `bitsandbytes`.
-    git clone 
-    git checkout
+    git clone https://github.com/flymin/ColossalAI.git
+    git checkout ascend && git pull
     cd ColossalAI
     BUILD_EXT=1 pip install .
     ```
