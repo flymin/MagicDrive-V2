@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Viewer</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #directory-tree {
+            width: 12%;
+            padding: 10px;
+            border-right: 1px solid #ccc;
+            overflow-y: auto;
+            resize: horizontal;
+            min-width: 250px;
+            max-width: 50%;
+        }
+
+        #resizer {
+            width: 5px;
+            cursor: col-resize;
+            background-color: #ccc;
+        }
+
+        #media-container {
+            flex-grow: 1;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            width: calc(12% - 5px);
+        }
+
+        .folder {
+            cursor: pointer;
+            margin: 5px 0;
+        }
+
+        .folder.selected {
+            background-color: #ddd;
+        }
+
+        .media-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .media-item {
+            flex: 1 1 calc(33.33% - 45px);
+            text-align: center;
+        }
+
+        .media-item img,
+        .media-item video {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .media-item.threeByFour {
+            flex: 1 1 calc(33.33% - 10px);
+        }
+
+        .media-item.twoByFour {
+            flex: 1 1 calc(50% - 10px);
+        }
+
+        .media-item.twoByThree {
+            flex: 1 1 calc(50% - 10px);
+        }
+
+        .media-item.twoByTwo {
+            flex: 1 1 calc(50% - 10px);
+        }
+
+        .pagination {
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+        }
+
+        .pagination span {
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .pagination .current-page {
+            font-weight: bold;
+        }
+
+        #apply-button,
+        #play-all,
+        #pause-all,
+        #restart-all {
+            margin-bottom: 10px;
+            margin-right: 5px;
+        }
+
+        .highlight_gt {
+            background-color: yellow;
+        }
+
+        .highlight_sample {
+            background-color: greenyellow;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="directory-tree">
+        <button id="refresh-tree">Refresh Directory Tree</button>
+        <div id="refreshing-message" style="display: none; margin-top: 10px; font-size: 0.9em; color: gray;">Tree
+            refreshing ...</div>
+        <div id="last-update" style="margin-top: 10px; font-size: 0.9em; color: gray;"></div>
+    </div>
+    <div id="resizer"></div>
+    <div id="media-container">
+        <div>
+            <button id="play-all">Play All Videos</button>
+            <button id="pause-all">Pause All Videos</button>
+            <button id="restart-all">Restart All Videos</button>
+            Layout:
+            <select id="layout-select">
+                <option value="threeByThree">3x3</option>
+                <option value="threeByFour">3x4</option>
+                <option value="twoByFour">2x4</option>
+                <option value="twoByThree">2x3</option>
+                <option value="twoByTwo">2x2</option>
+            </select>
+            Filter:
+            <select id="filter-select">
+                <option value="all">All</option>
+                <option value="sample">Only Sample</option>
+                <option value="gt">Only GT</option>
+            </select>
+            Sort:
+            <select id="sort-select">
+                <option value="default">Default</option>
+                <option value="index">Index</option>
+            </select>
+            <button id="apply-button">Apply</button>
+        </div>
+        <div id="media-items" class="media-grid"></div>
+        <div id="pagination" class="pagination"></div>
+    </div>
+    <script>
+        const apiUrl = 'http://127.0.0.1:5000';
+        let currentPath = '';
+        let currentPage = 1;
+        let layout = 'threeByThree';
+        let filter = 'all';
+        let sort = 'default';
+        const itemsPerPage = {
+            threeByThree: 9,
+            threeByFour: 12,
+            twoByFour: 8,
+            twoByThree: 6,
+            twoByTwo: 4,
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDirectoryTree();
+
+            document.getElementById('apply-button').addEventListener('click', () => {
+                layout = document.getElementById('layout-select').value;
+                filter = document.getElementById('filter-select').value;
+                sort = document.getElementById('sort-select').value;
+                currentPage = 1; // Reset to first page on filter or layout change
+                loadMedia(currentPath, currentPage);
+            });
+
+            document.getElementById('play-all').addEventListener('click', () => {
+                const videos = document.querySelectorAll('video');
+                videos.forEach(video => video.play());
+            });
+
+            document.getElementById('pause-all').addEventListener('click', () => {
+                const videos = document.querySelectorAll('video');
+                videos.forEach(video => video.pause());
+            });
+
+            document.getElementById('restart-all').addEventListener('click', () => {
+                const videos = document.querySelectorAll('video');
+                videos.forEach(video => {
+                    video.currentTime = 0;
+                    video.play();
+                });
+            });
+
+            document.getElementById('refresh-tree').addEventListener('click', () => {
+                loadDirectoryTree();
+            });
+
+            const resizer = document.getElementById('resizer');
+            const leftPanel = document.getElementById('directory-tree');
+            const rightPanel = document.getElementById('media-container');
+
+            let isResizing = false;
+
+            resizer.addEventListener('mousedown', (e) => {
+                isResizing = true;
+                document.addEventListener('mousemove', resize);
+                document.addEventListener('mouseup', stopResize);
+            });
+
+            function resize(e) {
+                if (isResizing) {
+                    const newWidth = e.clientX - leftPanel.offsetLeft;
+                    leftPanel.style.width = newWidth + 'px';
+                    rightPanel.style.width = `calc(100% - ${newWidth}px)`;
+                }
+            }
+
+            function stopResize() {
+                isResizing = false;
+                document.removeEventListener('mousemove', resize);
+                document.removeEventListener('mouseup', stopResize);
+            }
+        });
+
+        function loadDirectoryTree() {
+            const treeContainer = document.getElementById('directory-tree');
+            const refreshButton = document.getElementById('refresh-tree');
+            const refreshingMessage = document.getElementById('refreshing-message');
+            const lastUpdateDiv = document.getElementById('last-update');
+
+            // Clear existing directory tree content but keep the refresh button and last update div
+            treeContainer.innerHTML = '';
+            treeContainer.appendChild(refreshButton);
+            treeContainer.appendChild(refreshingMessage);
+
+            refreshingMessage.style.display = 'block';
+            fetch(`${apiUrl}/directories`)
+                .then(response => response.json())
+                .then(data => {
+                    treeContainer.appendChild(lastUpdateDiv);
+                    renderTree(data, treeContainer);
+                    updateLastUpdateTime();
+                })
+                .finally(() => {
+                    refreshingMessage.style.display = 'none';
+                });
+        }
+
+        function renderTree(data, container) {
+            data.forEach(item => {
+                const div = document.createElement('div');
+                div.textContent = item.name;
+                div.classList.add('folder');
+                div.addEventListener('click', () => {
+                    currentPath = item.path;
+                    currentPage = 1;
+                    loadMedia(currentPath, currentPage);
+                    highlightSelectedFolder(div);
+                });
+                container.appendChild(div);
+                if (item.children) {
+                    const subContainer = document.createElement('div');
+                    subContainer.style.marginLeft = '20px';
+                    renderTree(item.children, subContainer);
+                    container.appendChild(subContainer);
+                }
+            });
+        }
+
+        function highlightSelectedFolder(selectedDiv) {
+            const folders = document.querySelectorAll('.folder');
+            folders.forEach(folder => {
+                folder.classList.remove('selected');
+            });
+            selectedDiv.classList.add('selected');
+        }
+
+        function loadMedia(path, page) {
+            const mediaCount = itemsPerPage[layout];
+            fetch(`${apiUrl}/media?path=${encodeURIComponent(path)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const mediaContainer = document.getElementById('media-items');
+                    mediaContainer.innerHTML = '';
+                    const paginationContainer = document.getElementById('pagination');
+                    paginationContainer.innerHTML = '';
+
+                    let filteredMedia = data.media.filter(item => {
+                        if (filter === 'sample') {
+                            return item.path.includes('sample');
+                        } else if (filter === 'gt') {
+                            return item.path.includes('gt');
+                        }
+                        return true;
+                    });
+
+                    if (sort === 'index') {
+                        filteredMedia = filteredMedia.sort((a, b) => {
+                            const aName = a.path.split('/').pop();
+                            const bName = b.path.split('/').pop();
+                            const aMatch = aName.match(/\d+/);
+                            const bMatch = bName.match(/\d+/);
+                            const aIndex = aMatch ? parseInt(aMatch[0], 10) : 0;
+                            const bIndex = bMatch ? parseInt(bMatch[0], 10) : 0;
+                            if (aIndex !== bIndex) {
+                                return aIndex - bIndex;
+                            }
+                            return aName.localeCompare(bName);
+                        });
+                    }
+
+                    if (filteredMedia.length === 0) {
+                        mediaContainer.innerHTML = '<p>No media</p>';
+                        return;
+                    }
+
+                    const startIndex = (page - 1) * mediaCount;
+                    const endIndex = startIndex + mediaCount;
+                    const paginatedMedia = filteredMedia.slice(startIndex, endIndex);
+
+                    paginatedMedia.forEach(item => {
+                        const mediaItem = document.createElement('div');
+                        mediaItem.classList.add('media-item');
+                        mediaItem.classList.add(layout); // Add layout-specific class
+                        const folderName = path.split('/').pop();
+                        const fileName = item.path.split('/').pop();
+                        const mediaPath = document.createElement('div');
+                        var highlightedFileName = fileName.replace(/(gt)/gi, '<span class="highlight_gt">\$1</span>');
+                        highlightedFileName = highlightedFileName.replace(/(sample)/gi, '<span class="highlight_sample">\$1</span>');
+                        mediaPath.innerHTML = `${folderName}/${highlightedFileName}`;
+                        mediaItem.appendChild(mediaPath);
+                        if (item.type === 'image') {
+                            const img = document.createElement('img');
+                            img.src = `${apiUrl}/file?path=${encodeURIComponent(item.path)}`;
+                            mediaItem.appendChild(img);
+                        } else if (item.type === 'video') {
+                            const video = document.createElement('video');
+                            video.src = `${apiUrl}/file?path=${encodeURIComponent(item.path)}`;
+                            video.controls = true;
+                            video.autoplay = true;
+                            video.loop = true;
+                            mediaItem.appendChild(video);
+                        }
+                        mediaContainer.appendChild(mediaItem);
+                    });
+
+                    // Pagination
+                    const totalPages = Math.ceil(filteredMedia.length / mediaCount);
+                    if (page > 1) {
+                        const prevButton = document.createElement('button');
+                        prevButton.textContent = 'Previous';
+                        prevButton.addEventListener('click', () => loadMedia(currentPath, page - 1));
+                        paginationContainer.appendChild(prevButton);
+                    }
+                    // Page numbers
+                    for (let i = 1; i <= totalPages; i++) {
+                        const pageSpan = document.createElement('span');
+                        pageSpan.textContent = i;
+                        if (i === page) {
+                            pageSpan.classList.add('current-page');
+                        }
+                        pageSpan.addEventListener('click', () => loadMedia(currentPath, i));
+                        paginationContainer.appendChild(pageSpan);
+                    }
+                    if (page < totalPages) {
+                        const nextButton = document.createElement('button');
+                        nextButton.textContent = 'Next';
+                        nextButton.addEventListener('click', () => loadMedia(currentPath, page + 1));
+                        paginationContainer.appendChild(nextButton);
+                    }
+                });
+        }
+
+        function updateLastUpdateTime() {
+            const lastUpdateDiv = document.getElementById('last-update');
+            const now = new Date();
+            const formattedTime = now.toLocaleString();
+            lastUpdateDiv.textContent = `Last update: ${formattedTime}`;
+        }
+    </script>
+</body>
+
+</html>

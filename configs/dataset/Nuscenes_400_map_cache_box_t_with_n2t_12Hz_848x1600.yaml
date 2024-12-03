@@ -1,0 +1,17 @@
+# @package _global_
+defaults:
+  - /dataset/Nuscenes_map_cache_box_t_with_n2t_12Hz
+
+dataset:
+  map_bound:
+    x: [-50.0, 50.0, 0.25]
+    y: [-50.0, 50.0, 0.25]
+  dataset_cache_file_tag: 8x400x400_12Hz
+  dataset_cache_dirname: nuscenes_map_aux_12Hz
+  image_size: [848, 1600]  # only crop top
+  augment2d:
+    resize: [[1, 1]]
+    rotate: null
+
+  back_resize: [848, 1600]  # (h, w)
+  back_pad: [0, 52, 0, 0]  # left, top, right and bottom

@@ -21,13 +21,13 @@ The rapid advancement of diffusion models has greatly improved video synthesis, 
 
 ## News
 
-- [2024/11/22] Train & inference code Release!
+- [2024/12/03] Train & inference code Release! We will update links in readme later.
 - [2024/11/22] Paper and project page released! Check https://gaoruiyuan.com/magicdrivedit/
 
 ## TODO
 
 - [x] train & inference code
-- [ ] pretrained weight
+- [ ] pretrained weight & meta data for nuScenes
 
 ## Getting Started
 
@@ -122,7 +122,7 @@ ${CODE_ROOT}/pretrained/
 
 **MagicDriveDiT**
 
-coming soon
+TODO
 
 ### Prepare Data
 
@@ -140,7 +140,7 @@ We prepare the nuScenes dataset similar to [bevfusion's instructions](https://gi
     └── v1.0-trainval
     ```
     
-2. Download the meta data for `mmdet` from [this link](). 
+2. Download the meta data for `mmdet` from TODO. 
 
     <details><summary><b>Otherwise</b></summary>
     
@@ -176,10 +176,10 @@ We prepare the nuScenes dataset similar to [bevfusion's instructions](https://gi
     
     ```bash
     ${CODE_ROOT}/data/nuscenes_map_aux_12Hz
-    ├── train_8x200x200_12Hz.h5
-    ├── train_8x400x400_12Hz.h5
-    ├── val_8x200x200_12Hz.h5
-    └── val_8x400x400_12Hz.h5
+    ├── train_8x200x200_12Hz.h5 (25G)
+    ├── train_8x400x400_12Hz.h5 (99G)
+    ├── val_8x200x200_12Hz.h5 (5.3G)
+    └── val_8x400x400_12Hz.h5 (22G)
 	```
   </details>
 
@@ -286,5 +286,5 @@ We adopt the following open-sourced projects:
 
 - [BEVFusion](https://github.com/mit-han-lab/bevfusion): dataloader to handle 3d bounding boxes and BEV map
 - [Open-Sora](https://github.com/hpcaitech/Open-Sora): STDiT3 and framework to train
-- [ColossalAI](https://github.com/hpcaitech/ColossalAI): framework for parallel and zero
+- [ColossalAI](https://github.com/hpcaitech/ColossalAI): framework for parallel and zero2
 - [CogVideoX](https://github.com/THUDM/CogVideo): we use their CogVAE

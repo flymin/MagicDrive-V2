@@ -1,0 +1,1 @@
+from .magicdrive_stdit3 import MagicDriveSTDiT3_XL_2

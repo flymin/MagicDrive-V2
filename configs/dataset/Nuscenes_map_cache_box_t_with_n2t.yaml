@@ -1,0 +1,16 @@
+# @package _global_
+defaults:
+  - /dataset/Nuscenes_map_cache_box_t
+
+# this config only remove object items on map construction
+# map size: (8, 200, 200)
+
+dataset:
+  collect_meta_keys:  # send to DataContainer
+    - camera_intrinsics
+    - lidar2ego
+    - lidar2camera
+    - camera2lidar
+    - lidar2image
+    - img_aug_matrix
+    - next2top
