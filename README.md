@@ -27,7 +27,8 @@ The rapid advancement of diffusion models has greatly improved video synthesis, 
 ## TODO
 
 - [x] train & inference code
-- [ ] pretrained weight & metadata for nuScenes
+- [ ] pretrained weight for stage 3 & metadata for nuScenes (soon)
+- [ ] pretrained weight for stage 1 & 2 (will be released a bit later)
 
 ## Getting Started
 
