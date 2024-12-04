@@ -33,10 +33,10 @@ The rapid advancement of diffusion models has greatly improved video synthesis, 
 
 ### Environment Setup
 
-Clone this repo with submodules
+Clone this repo
 
 ```bash
-git clone --recursive https://github.com/flymin/MagicDriveDiT.git
+git clone https://github.com/flymin/MagicDriveDiT.git
 ```
 
 The code is tested on **A800/H20/Ascend 910b** servers. To setup the python environment, follow:
