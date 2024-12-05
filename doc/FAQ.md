@@ -110,6 +110,16 @@ For Ascend NPU, we tested on 910B1. TODO.
 
 ### Q2.2: I observe "grid effect" on model inference.
 
+Your generation may look like:
+
+<table><tbody>
+  <tr>
+    <td><img src=../assets/grid-effect-224.jpg width=350px></td>
+    <td><img src=../assets/grid-effect-848.jpg width=350px></td>
+  </tr>
+</tbody>
+</table>
+
 This is also related to the following warning:
 
 > Your input shape ... was rounded into ... Please pay attention to potential mismatch between w/ and w/o sp.
