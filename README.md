@@ -93,7 +93,7 @@ Please refer to the following yaml files for further details:
     ```
 2. Install Colossalai
     ```bash
-    # I remove dependency on `bitsandbytes`.
+    # We remove dependency on `bitsandbytes`.
     git clone https://github.com/flymin/ColossalAI.git
     git checkout ascend && git pull
     cd ColossalAI
@@ -192,7 +192,7 @@ We prepare the nuScenes dataset similar to [bevfusion's instructions](https://gi
 ### Inference the model for Generation
 
 ```bash
-# ${GPUS} can be 1/4/8 for sequence parallel.
+# ${GPUS} can be 1/2/4/8 for sequence parallel.
 # ${CFG} can be any file located in `configs/magicdrive/inference/`.
 # ${PATH_TO_MODEL} can be path to `ema.pt` or path to `model` from the checkpoint.
 # ${FRAME} can be 1/9/17/33/65/129/full...(8n+1). 1 for image; full for the full-length of nuScenes.
