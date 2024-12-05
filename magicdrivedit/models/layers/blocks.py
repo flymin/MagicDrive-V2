@@ -140,7 +140,11 @@ class PatchEmbed3D(nn.Module):
         if D % self.patch_size[0] != 0:
             x = F.pad(x, (0, 0, 0, 0, 0, self.patch_size[0] - D % self.patch_size[0]))
 
-        x = self.proj(x)  # (B C T H W)
+        if np.prod(x.shape[-3:]) > np.prod([33, 112, 200]) and USE_NPU:
+            # NOTE: conv3d on NPU cannot take too large batch sizes.
+            x = torch.cat([self.proj(_x) for _x in x.chunk(2, dim=0)], dim=0)
+        else:
+            x = self.proj(x)  # (B C T H W)
         if self.norm is not None:
             D, Wh, Ww = x.size(2), x.size(3), x.size(4)
             x = x.flatten(2).transpose(1, 2)
