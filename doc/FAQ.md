@@ -115,7 +115,7 @@ Your generation may look like:
 <table><tbody>
   <tr>
     <td><img src=../assets/grid-effect-224.jpg width=350px></td>
-    <td><img src=../assets/grid-effect-848.jpg width=350px></td>
+    <td><img src=../assets/grid-effect-848.jpg width=370px></td>
   </tr>
 </tbody>
 </table>
