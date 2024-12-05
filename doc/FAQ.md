@@ -10,103 +10,94 @@ Because the minimum version required to resolve [pytorch/pytorch#123510](https:/
 
 Please refer to the following table:
 
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-  font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-.tg .tg-cly1{text-align:left;vertical-align:middle}
-.tg .tg-g4tm{border-color:#333333;text-align:left;vertical-align:middle}
-.tg .tg-mwxe{text-align:right;vertical-align:middle}
-</style>
-<table class="tg"><tbody>
+<table><thead>
   <tr>
-    <td class="tg-g4tm" rowspan="2">Resolution</td>
-    <td class="tg-g4tm" rowspan="2">Frames</td>
-    <td class="tg-g4tm" colspan="4">Condition Encode+Diffusion (max with cpu offload)</td>
-    <td class="tg-g4tm" rowspan="2">Decode (max)</td>
+    <th rowspan="2">Resolution</th>
+    <th rowspan="2">Frames</th>
+    <th colspan="4">Condition Encode+Diffusion (max with cpu offload)</th>
+    <th rowspan="2">Decode (max)</th>
   </tr>
   <tr>
-    <td class="tg-g4tm">no sp</td>
-    <td class="tg-g4tm">sp=2</td>
-    <td class="tg-g4tm">sp=4</td>
-    <td class="tg-g4tm">sp=8</td>
+    <th>no sp</th>
+    <th>sp=2</th>
+    <th>sp=4</th>
+    <th>sp=8</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td rowspan="2">224x400x6</td>
+    <td>17 frame</td>
+    <td>17.91</td>
+    <td>17.91</td>
+    <td>17.91</td>
+    <td>17.91</td>
+    <td>3.87</td>
   </tr>
   <tr>
-    <td class="tg-cly1" rowspan="2">224x400x6</td>
-    <td class="tg-cly1">17 frame</td>
-    <td class="tg-mwxe">17.91</td>
-    <td class="tg-mwxe">17.91</td>
-    <td class="tg-mwxe">17.91</td>
-    <td class="tg-mwxe">17.91</td>
-    <td class="tg-mwxe">3.87</td>
+    <td>full</td>
+    <td>21.93</td>
+    <td>18.51</td>
+    <td>18.51</td>
+    <td>18.51</td>
+    <td>4.82</td>
   </tr>
   <tr>
-    <td class="tg-cly1">full</td>
-    <td class="tg-mwxe">21.93</td>
-    <td class="tg-mwxe">18.51</td>
-    <td class="tg-mwxe">18.51</td>
-    <td class="tg-mwxe">18.51</td>
-    <td class="tg-mwxe">4.82</td>
+    <td rowspan="2">424x800x6</td>
+    <td>17 frame</td>
+    <td>17.97</td>
+    <td>17.97</td>
+    <td>17.97</td>
+    <td>17.97</td>
+    <td>12.43</td>
   </tr>
   <tr>
-    <td class="tg-cly1" rowspan="2">424x800x6</td>
-    <td class="tg-cly1">17 frame</td>
-    <td class="tg-mwxe">17.97</td>
-    <td class="tg-mwxe">17.97</td>
-    <td class="tg-mwxe">17.97</td>
-    <td class="tg-mwxe">17.97</td>
-    <td class="tg-mwxe">12.43</td>
+    <td>full</td>
+    <td>40.69</td>
+    <td>25.70</td>
+    <td>19.80</td>
+    <td>19.80</td>
+    <td>16.24</td>
   </tr>
   <tr>
-    <td class="tg-cly1">full</td>
-    <td class="tg-mwxe">40.69</td>
-    <td class="tg-mwxe">25.70</td>
-    <td class="tg-mwxe">19.80</td>
-    <td class="tg-mwxe">19.80</td>
-    <td class="tg-mwxe">16.24</td>
+    <td rowspan="5">848x1600x6</td>
+    <td>17 frame</td>
+    <td>18.08</td>
+    <td>18.08</td>
+    <td>18.08</td>
+    <td>18.08</td>
+    <td>51.33</td>
   </tr>
   <tr>
-    <td class="tg-cly1" rowspan="5">848x1600x6</td>
-    <td class="tg-cly1">17 frame</td>
-    <td class="tg-mwxe">18.08</td>
-    <td class="tg-mwxe">18.08</td>
-    <td class="tg-mwxe">18.08</td>
-    <td class="tg-mwxe">18.08</td>
-    <td class="tg-mwxe">51.33</td>
+    <td>33 frame</td>
+    <td>24.89</td>
+    <td>18.33</td>
+    <td>18.33</td>
+    <td>18.33</td>
+    <td>52.08</td>
   </tr>
   <tr>
-    <td class="tg-cly1">33 frame</td>
-    <td class="tg-mwxe">24.89</td>
-    <td class="tg-mwxe">18.33</td>
-    <td class="tg-mwxe">18.33</td>
-    <td class="tg-mwxe">18.33</td>
-    <td class="tg-mwxe">52.08</td>
+    <td>65 frame</td>
+    <td>43.62</td>
+    <td>26.67</td>
+    <td>18.83</td>
+    <td>18.83</td>
+    <td>53.59</td>
   </tr>
   <tr>
-    <td class="tg-cly1">65 frame</td>
-    <td class="tg-mwxe">43.62</td>
-    <td class="tg-mwxe">26.67</td>
-    <td class="tg-mwxe">18.83</td>
-    <td class="tg-mwxe">18.83</td>
-    <td class="tg-mwxe">53.59</td>
+    <td>129 frame</td>
+    <td>81.14</td>
+    <td>48.24</td>
+    <td>29.66</td>
+    <td>23.83</td>
+    <td>56.84</td>
   </tr>
   <tr>
-    <td class="tg-cly1">129 frame</td>
-    <td class="tg-mwxe">81.14</td>
-    <td class="tg-mwxe">48.24</td>
-    <td class="tg-mwxe">29.66</td>
-    <td class="tg-mwxe">23.83</td>
-    <td class="tg-mwxe">56.84</td>
-  </tr>
-  <tr>
-    <td class="tg-cly1">full</td>
-    <td class="tg-mwxe">96G OOM</td>
-    <td class="tg-mwxe">83.40</td>
-    <td class="tg-mwxe">50.19</td>
-    <td class="tg-mwxe">39.76</td>
-    <td class="tg-mwxe">58.20</td>
+    <td>full</td>
+    <td>96G OOM</td>
+    <td>83.40</td>
+    <td>50.19</td>
+    <td>39.76</td>
+    <td>58.20</td>
   </tr>
 </tbody></table>
 
