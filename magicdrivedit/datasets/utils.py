@@ -50,6 +50,7 @@ def save_sample(x, save_path=None, fps=8, normalize=True, value_range=(-1, 1), f
         x (Tensor): shape [C, T, H, W]
     """
     assert x.ndim == 4, f"Input dim is {x.ndim}/{x.shape}"
+    x = x.to("cpu")
     if with_postfix:
         save_path += f"_{x.shape[-2]}x{x.shape[-1]}"
 
@@ -68,7 +69,7 @@ def save_sample(x, save_path=None, fps=8, normalize=True, value_range=(-1, 1), f
             x.clamp_(min=low, max=high)
             x.sub_(low).div_(max(high - low, 1e-5))
 
-        x = x.mul(255).add_(0.5).clamp_(0, 255).permute(1, 2, 3, 0).to("cpu", torch.uint8)
+        x = x.mul(255).add_(0.5).clamp_(0, 255).permute(1, 2, 3, 0).to(torch.uint8)
         imgList = [xi for xi in x.numpy()]
         if force_image:
             os.makedirs(save_path)

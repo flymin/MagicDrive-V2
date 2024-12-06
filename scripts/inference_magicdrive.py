@@ -71,6 +71,15 @@ from magicdrivedit.utils.misc import (
 from magicdrivedit.utils.train_utils import sp_vae
 
 
+TILING_PARAM = {
+    "default": dict(),  # it is designed for CogVideoX's 720x480, 4.5 GB
+    "384": dict(  # about 14.2 GB
+        tile_sample_min_height = 384,  # should be 48n
+        tile_sample_min_width = 720,  # should be 40n
+    ),
+}
+
+
 class FakeCoordinator:
     def block_all(self):
         pass
@@ -137,6 +146,9 @@ def main():
     cfg.ignore_ori_imgs = cfg.get("ignore_ori_imgs", True)
     if cfg.ignore_ori_imgs:
         cfg.dataset.drop_ori_imgs = True
+
+    # for lower gpu memory in vae decoding
+    cfg.vae_tiling = cfg.get("vae_tiling", None)
 
     # edit annotations
     if cfg.get("allow_class", None) != None:
@@ -265,6 +277,9 @@ def main():
     os.environ['TOKENIZERS_PARALLELISM'] = "true"
     text_encoder = build_module(cfg.text_encoder, MODELS, device=device)
     vae = build_module(cfg.vae, MODELS).to(device, dtype).eval()
+    if cfg.vae_tiling:
+        vae.module.enable_tiling(**TILING_PARAM[str(cfg.vae_tiling)])
+        logger.info(f"VAE Tiling is enabled with {TILING_PARAM[str(cfg.vae_tiling)]}")
 
     # == build diffusion model ==
     model = (
@@ -486,6 +501,7 @@ def main():
                 coordinator.block_all()
 
                 # == save samples ==
+                torch.cuda.empty_cache()
                 if is_main_process():
                     for idx, batch_prompt in enumerate(batch_prompts):
                         if verbose >= 1:
@@ -509,6 +525,7 @@ def main():
             
             # save_gt
             if is_main_process() and not cfg.ignore_ori_imgs:
+                torch.cuda.empty_cache()
                 samples = rearrange(x, "(B NC) C T H W -> B NC C T H W", NC=NC)
                 for idx, sample in enumerate(samples):
                     vid_sample = concat_6_views_pt(sample, oneline=False)

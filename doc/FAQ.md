@@ -105,6 +105,7 @@ Note:
 1. GPU memory are logged with `torch.cuda.max_memory_allocated`. The actual memory usage might be slightly higher than the values shown above (please refer to [this page](https://discuss.pytorch.org/t/pytorchs-torch-cuda-max-memory-allocated-showing-different-results-from-nvidia-smi/165706)). If there are more reliable methods, please open an issue to let us know. We will redo the test.
 2. We tested on NVIDIA H20 with 96G memory.
 3. The GPU memory consumption for VAE decoding is (relatively) steady for any frame lengths. However, higher resolutions significantly cost more memory. Sequence Parallel can reduce the GPU memory consumption for diffusion process but not VAE decoding.
+4. If you want to reduce the decoding consumption, please use `vae_tiling=384` (~14.2G). However, be prepared to observe some blending seams between tiles.
 
 For Ascend NPU, we tested on 910B1. TODO.
 
