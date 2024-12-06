@@ -107,7 +107,64 @@ Note:
 3. The GPU memory consumption for VAE decoding is (relatively) steady for any frame lengths. However, higher resolutions significantly cost more memory. Sequence Parallel can reduce the GPU memory consumption for diffusion process but not VAE decoding.
 4. If you want to reduce the decoding consumption, please use `vae_tiling=384` (~14.2G). However, be prepared to observe some blending seams between tiles.
 
-For Ascend NPU, we tested on 910B1. TODO.
+For Ascend NPU, we tested on 910B1:
+
+<table><thead>
+  <tr>
+    <th rowspan="2">Resolution</th>
+    <th rowspan="2">Frames</th>
+    <th colspan="4">Condision Encode+Diffusion (max with cpu offload)</th>
+    <th rowspan="2">Decode (max)</th>
+  </tr>
+  <tr>
+    <th>no sp</th>
+    <th>sp=2</th>
+    <th>sp=4</th>
+    <th>sp=8</th>
+  </tr></thead>
+<tbody>
+  <tr>
+    <td rowspan="2">424x800x6</td>
+    <td>17 frame</td>
+    <td>17.95</td>
+    <td>17.95</td>
+    <td>17.95</td>
+    <td>17.95</td>
+    <td>14.85</td>
+  </tr>
+  <tr>
+    <td>full</td>
+    <td>46.47</td>
+    <td>27.72</td>
+    <td>19.77</td>
+    <td>19.77</td>
+    <td>39.83</td>
+  </tr>
+  <tr>
+    <td rowspan="2">848x1600x6</td>
+    <td>17 frame</td>
+    <td>18.05</td>
+    <td>18.05</td>
+    <td>18.05</td>
+    <td>18.05</td>
+    <td><sup><b>*</b></sup>12.72</td>
+  </tr>
+  <tr>
+    <td>full</td>
+    <td>64G OOM</td>
+    <td>64G OOM</td>
+    <td>64G OOM</td>
+    <td>39.73</td>
+    <td><sup><b>*</b></sup>36.97</td>
+  </tr>
+</tbody>
+</table>
+
+<sup><b>*</b></sup>: we use `vae_tiling=384`.
+
+Here are some hints to run on NPUs:
+1. To run 848x1600 generation, you have to use `vae_tiling`. The default decoding process cannot fit in 64G memory.
+2. Please make sure you set `PYTORCH_NPU_ALLOC_CONF=expandable_segments:True` as an environment variable.
 
 ### Q2.2: I observe "grid effect" on model inference.
 
