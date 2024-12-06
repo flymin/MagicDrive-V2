@@ -203,6 +203,8 @@ torchrun --standalone --nproc_per_node ${GPUS} scripts/inference_magicdrive.py $
     cpu_offload=true scheduler.type=rflow-slice
 ```
 
+Please check [FAQ](https://github.com/flymin/MagicDriveDiT/blob/flymin-dev/doc/FAQ.md#q21-minimum-gpu-memory-requirements-for-inference) for more information about GPU memory requirements.
+
 For example, to generate the full-length video (20s@12fps) as the highest resolution (848x1600), with 8*H20/A800:
 
 ```bash
