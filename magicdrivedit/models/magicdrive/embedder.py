@@ -324,9 +324,9 @@ class ContinuousBBoxWithTextEmbedding(nn.Module):
         pos_emb = pos_emb * mask + self.mask_pos_feature[None] * (1 - mask)
 
         # class
-        cls_emb = torch.stack([self.class_tokens[i] for i in classes.flatten()])
+        cls_emb = self.class_tokens[classes.flatten()]
         if self.mean_var is not None:
-            mean_var = torch.stack([self.mean_var[i] for i in classes.flatten()])
+            mean_var = self.mean_var[classes.flatten()]
             mu, logvar = torch.split(mean_var, 1, dim=1)
             std = torch.exp(0.5 * logvar)
             if box_latent is None:
