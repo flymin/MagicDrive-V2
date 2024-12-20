@@ -75,17 +75,6 @@ def make_file_dirs(path):
     os.makedirs(os.path.dirname(path), exist_ok=True)
 
 
-class FakeCoordinator:
-    def block_all(self):
-        pass
-
-    def is_master(self):
-        return True
-
-    def destroy(self):
-        pass
-
-
 def set_omegaconf_key_value(cfg, key, value):
     p, m = key.rsplit(".", 1)
     node = cfg
@@ -166,20 +155,22 @@ def main():
     cfg.sp_size = cfg.get("sp_size", 1)
     if is_distributed():
         colossalai.launch_from_torch({})
-        coordinator = DistCoordinator()
-        if cfg.sp_size > 1:
-            DP_AXIS, SP_AXIS = 0, 1
-            dp_size = dist.get_world_size() // cfg.sp_size
-            pg_mesh = ProcessGroupMesh(dp_size, cfg.sp_size)
-            dp_group = pg_mesh.get_group_along_axis(DP_AXIS)
-            sp_group = pg_mesh.get_group_along_axis(SP_AXIS)
-            set_sequence_parallel_group(sp_group)
-        else:
-            # TODO: sequence_parallel_group unset!
-            dp_group = dist.group.WORLD
-        set_data_parallel_group(dp_group)
     else:
-        coordinator = FakeCoordinator()
+        dist.init_process_group(
+            backend="nccl", world_size=1, rank=0,
+            init_method="tcp://localhost:12355")
+    coordinator = DistCoordinator()
+    if cfg.sp_size > 1:
+        DP_AXIS, SP_AXIS = 0, 1
+        dp_size = dist.get_world_size() // cfg.sp_size
+        pg_mesh = ProcessGroupMesh(dp_size, cfg.sp_size)
+        dp_group = pg_mesh.get_group_along_axis(DP_AXIS)
+        sp_group = pg_mesh.get_group_along_axis(SP_AXIS)
+        set_sequence_parallel_group(sp_group)
+    else:
+        # TODO: sequence_parallel_group unset!
+        dp_group = dist.group.WORLD
+    set_data_parallel_group(dp_group)
     set_random_seed(seed=cfg.get("seed", 1024))
 
     # == init exp_dir ==

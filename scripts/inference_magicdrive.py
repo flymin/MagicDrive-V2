@@ -80,17 +80,6 @@ TILING_PARAM = {
 }
 
 
-class FakeCoordinator:
-    def block_all(self):
-        pass
-
-    def is_master(self):
-        return True
-    
-    def destroy(self):
-        pass
-
-
 def set_omegaconf_key_value(cfg, key, value):
     p, m = key.rsplit(".", 1)
     node = cfg
@@ -178,25 +167,26 @@ def main():
         # colossalai.launch_from_torch({})
         dist.init_process_group(backend="nccl", timeout=timedelta(hours=1))
         torch.cuda.set_device(dist.get_rank() % torch.cuda.device_count())
-        coordinator = DistCoordinator()
         cfg.sp_size = dist.get_world_size()
-        if cfg.sp_size > 1:
-            DP_AXIS, SP_AXIS = 0, 1
-            dp_size = dist.get_world_size() // cfg.sp_size
-            pg_mesh = ProcessGroupMesh(dp_size, cfg.sp_size)
-            dp_group = pg_mesh.get_group_along_axis(DP_AXIS)
-            sp_group = pg_mesh.get_group_along_axis(SP_AXIS)
-            set_sequence_parallel_group(sp_group)
-            print(f"Using sp_size={cfg.sp_size}")
-        else:
-            # TODO: sequence_parallel_group unset!
-            dp_group = dist.group.WORLD
-        set_data_parallel_group(dp_group)
-        enable_sequence_parallelism = cfg.sp_size > 1
     else:
+        dist.init_process_group(
+            backend="nccl", world_size=1, rank=0,
+            init_method="tcp://localhost:12355")
         cfg.sp_size = 1
-        coordinator = FakeCoordinator()
-        enable_sequence_parallelism = False
+    coordinator = DistCoordinator()
+    if cfg.sp_size > 1:
+        DP_AXIS, SP_AXIS = 0, 1
+        dp_size = dist.get_world_size() // cfg.sp_size
+        pg_mesh = ProcessGroupMesh(dp_size, cfg.sp_size)
+        dp_group = pg_mesh.get_group_along_axis(DP_AXIS)
+        sp_group = pg_mesh.get_group_along_axis(SP_AXIS)
+        set_sequence_parallel_group(sp_group)
+        print(f"Using sp_size={cfg.sp_size}")
+    else:
+        # TODO: sequence_parallel_group unset!
+        dp_group = dist.group.WORLD
+    set_data_parallel_group(dp_group)
+    enable_sequence_parallelism = cfg.sp_size > 1
     set_random_seed(seed=cfg.get("seed", 1024))
 
     # == init exp_dir ==
