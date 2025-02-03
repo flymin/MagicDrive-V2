@@ -20,7 +20,7 @@ The rapid advancement of diffusion models has greatly improved video synthesis, 
 </details>
 
 ## News
-
+- [2025/01/27] We update **fine-tuned results on Waymo Open Dataset** on our project page. [Check it out](https://gaoruiyuan.com/magicdrivedit/#waymo)!
 - [2024/12/07] Stage-3 checkpoint and nuScenes metadata for training & inference release!
 - [2024/12/03] Train & inference code release! We will update links in readme later.
 - [2024/11/22] Paper and project page released! Check https://gaoruiyuan.com/magicdrivedit/
