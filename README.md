@@ -287,12 +287,11 @@ Note: `sp=4` (stage 3) needs at least 4 GPUs to run.
 ## Cite Us
 
 ```bibtex
-@misc{gao2024magicdrive-v2,
+@inproceedings{gao2025magicdrive-v2,
   title={{MagicDrive-V2}: High-Resolution Long Video Generation for Autonomous Driving with Adaptive Control},
   author={Gao, Ruiyuan and Chen, Kai and Xiao, Bo and Hong, Lanqing and Li, Zhenguo and Xu, Qiang},
-  year={2024},
-  eprint={2411.13807},
-  archivePrefix={arXiv},
+  booktitle={Proceedings of the IEEE/CVF International Conference on Computer Vision},
+  year={2025}
 }
 ```
 
