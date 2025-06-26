@@ -33,6 +33,7 @@ The rapid advancement of diffusion models has greatly improved video synthesis, 
 - [x] train & inference code
 - [x] pretrained weight for stage 3 & metadata for nuScenes
 - [ ] pretrained weight for stage 1 & 2 (will be released later)
+- [ ] upgrade with waymo dataset
 
 ## Getting Started
 
