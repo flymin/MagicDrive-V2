@@ -8,7 +8,9 @@ This repository contains the implementation of the paper
 > [Ruiyuan Gao](https://gaoruiyuan.com/)<sup>1</sup>, [Kai Chen](https://kaichen1998.github.io/)<sup>2</sup>, [Bo Xiao](https://www.linkedin.com/in/bo-xiao-19909955/?originalSubdomain=ie)<sup>3</sup>, [Lanqing Hong](https://scholar.google.com.sg/citations?user=2p7x6OUAAAAJ&hl=en)<sup>4</sup>, [Zhenguo Li](https://scholar.google.com/citations?user=XboZC1AAAAAJ&hl=en)<sup>4</sup>, [Qiang Xu](https://cure-lab.github.io/)<sup>1</sup><br>
 > <sup>1</sup>CUHK <sup>2</sup>HKUST <sup>3</sup>Huawei Cloud <sup>4</sup>Huawei Noah's Ark Lab <br>
 
-https://github.com/user-attachments/assets/f43812ea-087b-4b70-883b-1e2f1c0df8d7
+
+https://github.com/user-attachments/assets/4c915eca-6583-422e-9a1a-1eebb9379ff4
+
 
 ## Abstract
 
