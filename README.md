@@ -1,10 +1,10 @@
-# MagicDriveDiT
+# MagicDrive-V2
 
-[![arXiv](https://img.shields.io/badge/ArXiv-2411.13807-b31b1b.svg?style=plastic)](https://arxiv.org/abs/2411.13807) [![web](https://img.shields.io/badge/Web-MagicDriveDiT-blue.svg?style=plastic)](https://gaoruiyuan.com/magicdrivedit/) [![license](https://img.shields.io/github/license/flymin/MagicDriveDiT?style=plastic)](https://github.com/flymin/MagicDriveDiT/blob/main/LICENSE) [![star](https://img.shields.io/github/stars/flymin/MagicDriveDiT)](https://github.com/flymin/MagicDriveDiT) [![Paper](https://huggingface.co/datasets/huggingface/badges/resolve/main/paper-page-sm.svg)](https://huggingface.co/papers/2411.13807) [![Model](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-sm.svg)](https://huggingface.co/flymin/MagicDriveDiT-stage3-40k-ft) [![Dataset](https://huggingface.co/datasets/huggingface/badges/resolve/main/dataset-on-hf-sm.svg)](https://huggingface.co/datasets/flymin/MagicDriveDiT-nuScenes-metadata)
+[![arXiv](https://img.shields.io/badge/ArXiv-2411.13807-b31b1b.svg?style=plastic)](https://arxiv.org/abs/2411.13807) [![web](https://img.shields.io/badge/Web-MagicDrive-V2-blue.svg?style=plastic)](https://gaoruiyuan.com/MagicDrive-V2/) [![license](https://img.shields.io/github/license/flymin/MagicDrive-V2?style=plastic)](https://github.com/flymin/MagicDrive-V2/blob/main/LICENSE) [![star](https://img.shields.io/github/stars/flymin/MagicDrive-V2)](https://github.com/flymin/MagicDrive-V2) [![Paper](https://huggingface.co/datasets/huggingface/badges/resolve/main/paper-page-sm.svg)](https://huggingface.co/papers/2411.13807) [![Model](https://huggingface.co/datasets/huggingface/badges/resolve/main/model-on-hf-sm.svg)](https://huggingface.co/flymin/MagicDriveDiT-stage3-40k-ft) [![Dataset](https://huggingface.co/datasets/huggingface/badges/resolve/main/dataset-on-hf-sm.svg)](https://huggingface.co/datasets/flymin/MagicDriveDiT-nuScenes-metadata)
 
 This repository contains the implementation of the paper 
 
-> MagicDriveDiT: High-Resolution Long Video Generation for Autonomous Driving with Adaptive Control <br>
+> MagicDrive-V2: High-Resolution Long Video Generation for Autonomous Driving with Adaptive Control <br>
 > [Ruiyuan Gao](https://gaoruiyuan.com/)<sup>1</sup>, [Kai Chen](https://kaichen1998.github.io/)<sup>2</sup>, [Bo Xiao](https://www.linkedin.com/in/bo-xiao-19909955/?originalSubdomain=ie)<sup>3</sup>, [Lanqing Hong](https://scholar.google.com.sg/citations?user=2p7x6OUAAAAJ&hl=en)<sup>4</sup>, [Zhenguo Li](https://scholar.google.com/citations?user=XboZC1AAAAAJ&hl=en)<sup>4</sup>, [Qiang Xu](https://cure-lab.github.io/)<sup>1</sup><br>
 > <sup>1</sup>CUHK <sup>2</sup>HKUST <sup>3</sup>Huawei Cloud <sup>4</sup>Huawei Noah's Ark Lab <br>
 
@@ -13,17 +13,18 @@ https://github.com/user-attachments/assets/f43812ea-087b-4b70-883b-1e2f1c0df8d7
 ## Abstract
 
 <details>
-<summary><b>TL; DR</b> MagicDriveDiT generates high-resolution and long videos for street-view with diverse 3D geometry control and multiview consistency.</summary>
+<summary><b>TL; DR</b> MagicDrive-V2 generates high-resolution and long videos for street-view with diverse 3D geometry control and multiview consistency.</summary>
 
-The rapid advancement of diffusion models has greatly improved video synthesis, especially in controllable video generation, which is essential for applications like autonomous driving. However, existing methods are limited by scalability and how control conditions are integrated, failing to meet the needs for high-resolution and long videos for autonomous driving applications. In this paper, we introduce MagicDriveDiT, a novel approach based on the DiT architecture, and tackle these challenges. Our method enhances scalability through flow matching and employs a progressive training strategy to manage complex scenarios. By incorporating spatial-temporal conditional encoding, MagicDriveDiT achieves precise control over spatial-temporal latents. Comprehensive experiments show its superior performance in generating realistic street scene videos with higher resolution and more frames. MagicDriveDiT significantly improves video generation quality and spatial-temporal controls, expanding its potential applications across various tasks in autonomous driving.
+The rapid advancement of diffusion models has greatly improved video synthesis, especially in controllable video generation, which is essential for applications like autonomous driving. However, existing methods are limited by scalability and how control conditions are integrated, failing to meet the needs for high-resolution and long videos for autonomous driving applications. In this paper, we introduce MagicDrive-V2, a novel approach based on the DiT architecture, and tackle these challenges. Our method enhances scalability through flow matching and employs a progressive training strategy to manage complex scenarios. By incorporating spatial-temporal conditional encoding, MagicDrive-V2 achieves precise control over spatial-temporal latents. Comprehensive experiments show its superior performance in generating realistic street scene videos with higher resolution and more frames. MagicDrive-V2 significantly improves video generation quality and spatial-temporal controls, expanding its potential applications across various tasks in autonomous driving.
 
 </details>
 
 ## News
-- [2025/01/27] We update **fine-tuned results on Waymo Open Dataset** on our project page. [Check it out](https://gaoruiyuan.com/magicdrivedit/#waymo)!
+- [2025/06/26] MagicDrive-V2 is accepted by ICCV 2025 :tada: . We rename this repo from MagicDriveDiT to MagicDrive-V2 to align with our paper.
+- [2025/01/27] We update **fine-tuned results on Waymo Open Dataset** on our project page. [Check it out](https://gaoruiyuan.com/MagicDrive-V2/#waymo)!
 - [2024/12/07] Stage-3 checkpoint and nuScenes metadata for training & inference release!
 - [2024/12/03] Train & inference code release! We will update links in readme later.
-- [2024/11/22] Paper and project page released! Check https://gaoruiyuan.com/magicdrivedit/
+- [2024/11/22] Paper and project page released! Check https://gaoruiyuan.com/MagicDrive-V2/
 
 ## TODO
 
@@ -38,7 +39,7 @@ The rapid advancement of diffusion models has greatly improved video synthesis, 
 Clone this repo
 
 ```bash
-git clone https://github.com/flymin/MagicDriveDiT.git
+git clone https://github.com/flymin/MagicDrive-V2.git
 ```
 
 The code is tested on **A800/H20/Ascend 910b** servers. To setup the python environment, follow:
@@ -123,7 +124,7 @@ ${CODE_ROOT}/pretrained/
 └── t5-v1_1-xxl
 ```
 
-### MagicDriveDiT Checkpoints
+### MagicDrive-V2 Checkpoints
 
 Please download the stage-3 checkpoint from [flymin/MagicDriveDiT-stage3-40k-ft](https://huggingface.co/flymin/MagicDriveDiT-stage3-40k-ft) and put it in `${CODE_ROOT}/ckpts/` as:
 
@@ -191,7 +192,7 @@ We prepare the nuScenes dataset similar to [bevfusion's instructions](https://gi
 	```
   </details>
 
-## Try MagicDriveDiT
+## Try MagicDrive-V2
 
 *In most cases, you can use the same commands on both GPU servers and Ascend servers.*
 
@@ -209,7 +210,7 @@ torchrun --standalone --nproc_per_node ${GPUS} scripts/inference_magicdrive.py $
     cpu_offload=true scheduler.type=rflow-slice
 ```
 
-Please check [FAQ](https://github.com/flymin/MagicDriveDiT/blob/flymin-dev/doc/FAQ.md#q21-minimum-gpu-memory-requirements-for-inference) for more information about GPU memory requirements.
+Please check [FAQ](https://github.com/flymin/MagicDrive-V2/blob/flymin-dev/doc/FAQ.md#q21-minimum-gpu-memory-requirements-for-inference) for more information about GPU memory requirements.
 
 For example, to generate the full-length video (20s@12fps) as the highest resolution (848x1600), with 8*H20/A800:
 
@@ -255,7 +256,7 @@ torchrun --standalone --nproc_per_node 8 scripts/test_magicdrive.py \
 ```
 
 
-## Train MagicDriveDiT
+## Train MagicDrive-V2
 
 Launch training with (with 32xA800/H20):
 ```bash
@@ -283,8 +284,8 @@ Note: `sp=4` (stage 3) needs at least 4 GPUs to run.
 ## Cite Us
 
 ```bibtex
-@misc{gao2024magicdrivedit,
-  title={{MagicDriveDiT}: High-Resolution Long Video Generation for Autonomous Driving with Adaptive Control},
+@misc{gao2024magicdrive-v2,
+  title={{MagicDrive-V2}: High-Resolution Long Video Generation for Autonomous Driving with Adaptive Control},
   author={Gao, Ruiyuan and Chen, Kai and Xiao, Bo and Hong, Lanqing and Li, Zhenguo and Xu, Qiang},
   year={2024},
   eprint={2411.13807},
